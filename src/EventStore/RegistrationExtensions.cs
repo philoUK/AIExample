@@ -1,17 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace EventStore;
 
 public static class RegistrationExtensions
 {
-    public static void RegisterEventStore(this IServiceCollection services, IConfiguration configuration)
+    public static void RegisterEventStore(this IHostApplicationBuilder builder)
     {
-        services.AddDbContext<EventStoreDbContext>(opts =>
-            opts.UseNpgsql(configuration.GetConnectionString("EventStore")));
+        builder.AddNpgsqlDbContext<EventStoreDbContext>("eventstore");
 
-        services.AddScoped<IEventStore, PostgresEventStore>();
-        services.AddHostedService<EventStoreMigrationService>();
+        builder.Services.AddScoped<IEventStore, PostgresEventStore>();
+        builder.Services.AddHostedService<EventStoreMigrationService>();
     }
 }
