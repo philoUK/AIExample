@@ -10,7 +10,7 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 builder.Services.AddValidation();
 builder.Services.RegisterAdministrationModule();
-builder.Services.RegisterEventStore(builder.Configuration);
+builder.RegisterEventStore();
 
 var app = builder.Build();
 
