@@ -56,6 +56,18 @@ Or edit [src/Api/appsettings.json](src/Api/appsettings.json):
 
 Database migrations run automatically on startup.
 
+## Adding migrations
+
+When the `EventStoreDbContext` schema changes, generate a new EF Core migration from the repository root:
+
+```bash
+dotnet ef migrations add <MigrationName> -p src/EventStore -s src/Api
+```
+
+The `-p` flag points to the project that owns the `DbContext`; `-s` provides the start-up project so EF can resolve configuration. The design-time factory in `EventStoreDbContextFactory` supplies a local connection string so the CLI works without Aspire running.
+
+Commit both the generated migration file (e.g. `Migrations/<timestamp>_<MigrationName>.cs`) and the updated snapshot (`Migrations/EventStoreDbContextModelSnapshot.cs`). Migrations are applied automatically at API start-up by `EventStoreMigrationService`.
+
 ## Telemetry
 
 ### Azure Application Insights
