@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AdministationModule\AdministrationModule.csproj" />
     <ProjectReference Include="..\EventStore\EventStore.csproj" />
+    <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
