@@ -9,8 +9,8 @@ builder.AddServiceDefaults();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddValidation();
-builder.Services.RegisterAdministrationModule();
-builder.RegisterEventStore();
+builder.RegisterAdministrationModule();
+builder.Services.RegisterEventCommandRouter();
 
 var app = builder.Build();
 

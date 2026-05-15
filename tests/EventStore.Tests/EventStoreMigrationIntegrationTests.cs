@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Testcontainers.PostgreSql;
@@ -20,24 +21,23 @@ public class EventStoreMigrationIntegrationTests : IAsyncLifetime
 
     public Task DisposeAsync() => _postgres.DisposeAsync().AsTask();
 
+    private const string TestConnectionStringName = "test-eventstore";
+
     // ── helpers ──────────────────────────────────────────────────────────────
 
-    private EventStoreDbContext BuildDbContext()
+    private EventStoreMigrationService BuildMigrationService()
     {
-        var options = new DbContextOptionsBuilder<EventStoreDbContext>()
-            .UseNpgsql(_postgres.GetConnectionString())
-            .Options;
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                [$"ConnectionStrings:{TestConnectionStringName}"] = _postgres.GetConnectionString()
+            })
+            .Build();
 
-        return new EventStoreDbContext(options);
-    }
-
-    private EventStoreMigrationService BuildMigrationService(EventStoreDbContext context)
-    {
         var services = new ServiceCollection();
-        services.AddSingleton(context);
-        services.AddScoped(_ => context);
+        services.AddSingleton<IConfiguration>(config);
         var scopeFactory = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>();
-        return new EventStoreMigrationService(scopeFactory);
+        return new EventStoreMigrationService(scopeFactory, TestConnectionStringName);
     }
 
     // ── tests ─────────────────────────────────────────────────────────────────
@@ -45,8 +45,7 @@ public class EventStoreMigrationIntegrationTests : IAsyncLifetime
     [Fact]
     public async Task AfterMigration_EventsTableExists()
     {
-        await using var context = BuildDbContext();
-        var service = BuildMigrationService(context);
+        var service = BuildMigrationService();
 
         await service.StartAsync(CancellationToken.None);
 
@@ -57,8 +56,7 @@ public class EventStoreMigrationIntegrationTests : IAsyncLifetime
     [Fact]
     public async Task AfterMigration_EventsTableHasExpectedColumns()
     {
-        await using var context = BuildDbContext();
-        var service = BuildMigrationService(context);
+        var service = BuildMigrationService();
 
         await service.StartAsync(CancellationToken.None);
 
@@ -80,8 +78,7 @@ public class EventStoreMigrationIntegrationTests : IAsyncLifetime
     [Fact]
     public async Task AfterMigration_UniqueIndexOnAggregateIdAndSequenceNumberExists()
     {
-        await using var context = BuildDbContext();
-        var service = BuildMigrationService(context);
+        var service = BuildMigrationService();
 
         await service.StartAsync(CancellationToken.None);
 

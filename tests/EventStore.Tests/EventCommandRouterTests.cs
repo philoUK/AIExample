@@ -64,7 +64,7 @@ public class EventCommandRouterTests : IDisposable
     {
         var services = new ServiceCollection();
         services.AddSingleton<EventCommandHandler<TestCommand>>(handler);
-        return new EventCommandRouter(_store, services.BuildServiceProvider());
+        return new EventCommandRouter(services.BuildServiceProvider());
     }
 }
 
