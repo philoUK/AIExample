@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# cache files
+.lscache
+
 # dotenv files
 .env
 
@@ -480,3 +483,5 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+*.lscache
