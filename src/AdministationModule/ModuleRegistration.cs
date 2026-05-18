@@ -1,14 +1,16 @@
+using EventStore;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace AdministrationModule;
 
 public static class ModuleRegistration
 {
-    public static void RegisterAdministrationModule(this IServiceCollection services)
+    public static void RegisterAdministrationModule(this IHostApplicationBuilder builder)
     {
-        // Register command handlers
-        // services.AddTransient<CommandHandler<YourCommand>, YourCommandHandler>();
+        builder.RegisterModuleEventStore<AdministrationEventStoreDbContext>("administration-eventstore");
+        // Register command handlers as they are added, e.g.:
+        // builder.Services.AddModuleCommandHandler<YourCommand, YourCommandHandler, AdministrationEventStoreDbContext>();
     }
 
     public static void MapAdministrationEndpoints(this IEndpointRouteBuilder app)

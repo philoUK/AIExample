@@ -1,6 +1,6 @@
 namespace EventStore;
 
-internal class DatabaseEvent
+public class DatabaseEvent
 {
     public Guid Id { get; set; }
     public Guid AggregateId { get; set; }

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace EventStore;
 
-public class EventCommandRouter(IEventStore eventStore, IServiceProvider serviceProvider)
+public class EventCommandRouter(IServiceProvider serviceProvider)
 {
     public async Task HandleCommand(object command)
     {
@@ -18,12 +18,11 @@ public class EventCommandRouter(IEventStore eventStore, IServiceProvider service
             var methodInfo = handler
                 ?.GetType()
                 .GetMethod(
-                    "Handle",
+                    "Execute",
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
                 );
             if (methodInfo?.Invoke(handler, [command]) is Task task)
                 await task;
-            await eventStore.SaveChanges();
             activity?.SetStatus(ActivityStatusCode.Ok);
         }
         catch (Exception ex)

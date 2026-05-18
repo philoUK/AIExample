@@ -8,5 +8,11 @@ public abstract class EventCommandHandler<TCommand>(IEventStore eventStore)
         return new EventStream<TEntity>(eventStore, aggregateId);
     }
 
+    internal async Task Execute(TCommand command)
+    {
+        await Handle(command);
+        await eventStore.SaveChanges();
+    }
+
     protected abstract Task Handle(TCommand command);
 }
