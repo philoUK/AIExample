@@ -17,6 +17,10 @@ internal class InviteAdministratorCommandHandler : EventCommandHandler<InviteAdm
 
     protected override async Task<Result> Handle(InviteAdministratorCommand command)
     {
+        var emailResult = Email.Create(command.Email);
+        if (emailResult.IsFailure)
+            return Result.Fail([.. emailResult.Errors]);
+
         var stream = GetStream<Administrator>(Guid.NewGuid());
         var administrator = await stream.GetEntity();
         var result = administrator.Invite(
@@ -24,7 +28,7 @@ internal class InviteAdministratorCommandHandler : EventCommandHandler<InviteAdm
             new RegistrationId(Guid.NewGuid()),
             command.FirstName,
             command.LastName,
-            new Email(command.Email)
+            emailResult.Value
         );
         if (result.IsSuccess)
         {
