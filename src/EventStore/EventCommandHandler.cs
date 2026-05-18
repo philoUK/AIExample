@@ -1,3 +1,5 @@
+using Shared;
+
 namespace EventStore;
 
 public abstract class EventCommandHandler<TCommand>(IEventStore eventStore)
@@ -8,11 +10,15 @@ public abstract class EventCommandHandler<TCommand>(IEventStore eventStore)
         return new EventStream<TEntity>(eventStore, aggregateId);
     }
 
-    internal async Task Execute(TCommand command)
+    internal async Task<Result> Execute(TCommand command)
     {
-        await Handle(command);
-        await eventStore.SaveChanges();
+        var result = await Handle(command);
+        if (result.IsSuccess)
+        {
+            await eventStore.SaveChanges();
+        }
+        return result;
     }
 
-    protected abstract Task Handle(TCommand command);
+    protected abstract Task<Result> Handle(TCommand command);
 }

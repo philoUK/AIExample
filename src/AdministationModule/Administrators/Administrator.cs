@@ -12,7 +12,7 @@ internal class Administrator : AggregateRoot
 
     public Result Invite(
         Guid invitedBy,
-        Guid registrationId,
+        RegistrationId registrationId,
         string firstName,
         string lastName,
         Email email
@@ -26,7 +26,13 @@ internal class Administrator : AggregateRoot
         {
             return Result.Fail("Administrator invitation is already pending.");
         }
-        var statusResult = Invited.Create(invitedBy, registrationId, email, firstName, lastName);
+        var statusResult = Invited.Create(
+            invitedBy,
+            registrationId.Value,
+            email,
+            firstName,
+            lastName
+        );
         if (statusResult.IsFailure)
         {
             return Result.Fail(statusResult.Errors.ToArray());

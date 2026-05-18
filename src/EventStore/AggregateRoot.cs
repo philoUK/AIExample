@@ -7,7 +7,6 @@ public abstract class AggregateRoot
     protected void RaiseEvent(object @event)
     {
         _uncommittedEvents.Add(@event);
-        Apply(@event);
     }
 
     public void ClearUncommittedEvents() => _uncommittedEvents.Clear();

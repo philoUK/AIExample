@@ -7,22 +7,26 @@ public static class RegistrationExtensions
 {
     public static void RegisterModuleEventStore<TContext>(
         this IHostApplicationBuilder builder,
-        string connectionStringName)
+        string connectionStringName
+    )
         where TContext : EventStoreDbContext
     {
         builder.AddNpgsqlDbContext<TContext>(connectionStringName);
 
-        builder.Services.AddKeyedScoped<IEventStore>(typeof(TContext), (sp, _) =>
-            new PostgresEventStore(sp.GetRequiredService<TContext>()));
+        builder.Services.AddKeyedScoped<IEventStore>(
+            typeof(TContext),
+            (sp, _) => new PostgresEventStore(sp.GetRequiredService<TContext>())
+        );
 
-        builder.Services.AddHostedService(sp =>
-            new EventStoreMigrationService(
-                sp.GetRequiredService<IServiceScopeFactory>(),
-                connectionStringName));
+        builder.Services.AddHostedService(sp => new EventStoreMigrationService(
+            sp.GetRequiredService<IServiceScopeFactory>(),
+            connectionStringName
+        ));
     }
 
     public static IServiceCollection AddModuleCommandHandler<TCommand, THandler, TContext>(
-        this IServiceCollection services)
+        this IServiceCollection services
+    )
         where THandler : EventCommandHandler<TCommand>
         where TContext : EventStoreDbContext
     {

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Shared;
 using Xunit;
 
 namespace EventStore.Tests;
@@ -74,12 +75,12 @@ record TestCommand;
 
 class SuccessHandler(IEventStore eventStore) : EventCommandHandler<TestCommand>(eventStore)
 {
-    protected override Task Handle(TestCommand command) => Task.CompletedTask;
+    protected override Task<Result> Handle(TestCommand command) => Task.FromResult(Result.Ok());
 }
 
 class ThrowingHandler(IEventStore eventStore) : EventCommandHandler<TestCommand>(eventStore)
 {
-    protected override async Task Handle(TestCommand command)
+    protected override async Task<Result> Handle(TestCommand command)
     {
         await Task.Yield();
         throw new InvalidOperationException("handler error");
