@@ -1,5 +1,9 @@
+using AdministrationModule.Administrators.Endpoints;
+using AdministrationModule.Administrators.UseCases;
 using EventStore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace AdministrationModule;
@@ -8,15 +12,19 @@ public static class ModuleRegistration
 {
     public static void RegisterAdministrationModule(this IHostApplicationBuilder builder)
     {
+        builder.Services.AddValidation();
         builder.RegisterModuleEventStore<AdministrationEventStoreDbContext>(
-            "administration-eventstore");
-        // Register command handlers as they are added, e.g.:
-        // builder.Services.AddModuleCommandHandler<YourCommand, YourCommandHandler, AdministrationEventStoreDbContext>();
+            "administration-eventstore"
+        );
+        builder.Services.AddModuleCommandHandler<
+            InviteAdministratorCommand,
+            InviteAdministratorCommandHandler,
+            AdministrationEventStoreDbContext
+        >();
     }
 
     public static void MapAdministrationEndpoints(this IEndpointRouteBuilder app)
     {
-        // Map your endpoints here
-        // app.MapPost("/your-endpoint", YourEndpointHandler);
+        app.MapPost("/administrators/invite", InviteAdministratorEndpoint.Handle);
     }
 }

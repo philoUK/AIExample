@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "coreclr",
+            "request": "launch",
+            "name": "Debug AppHost",
+            "program": "${workspaceFolder}/src/AppHost/bin/Debug/net10.0/AppHost.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/AppHost",
+            "stopAtEntry": false,
+            "env": {
+                "DOTNET_ENVIRONMENT": "Development",
+                "ASPIRE_ALLOW_UNSECURED_TRANSPORT": "true"
+            },
+            "preLaunchTask": "build-apphost"
+        },
+        {
+            "type": "coreclr",
+            "request": "attach",
+            "name": "Attach to Api",
+            "processName": "Api",
+            "preLaunchTask": "wait-for-api"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "AppHost + Api",
+            "configurations": ["Debug AppHost", "Attach to Api"],
+            "stopAll": true
+        }
+    ]
+}
