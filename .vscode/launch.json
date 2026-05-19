@@ -14,6 +14,20 @@
                 "ASPIRE_ALLOW_UNSECURED_TRANSPORT": "true"
             },
             "preLaunchTask": "build-apphost"
+        },
+        {
+            "type": "coreclr",
+            "request": "attach",
+            "name": "Attach to Api",
+            "processName": "Api",
+            "preLaunchTask": "wait-for-api"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "AppHost + Api",
+            "configurations": ["Debug AppHost", "Attach to Api"],
+            "stopAll": true
         }
     ]
 }

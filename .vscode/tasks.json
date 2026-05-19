@@ -12,6 +12,16 @@
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "wait-for-api",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "while (-not (Get-Process -Name Api -ErrorAction SilentlyContinue)) { Start-Sleep -Milliseconds 500 }; Start-Sleep -Seconds 2"
+            ],
+            "problemMatcher": []
         }
     ]
 }
