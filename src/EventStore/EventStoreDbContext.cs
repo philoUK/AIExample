@@ -2,8 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventStore;
 
-public class EventStoreDbContext(DbContextOptions options)
-    : DbContext(options)
+public class EventStoreDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<DatabaseEvent> Events => Set<DatabaseEvent>();
 

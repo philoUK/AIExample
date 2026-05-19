@@ -2,7 +2,7 @@ using AdministrationContracts;
 using EventStore;
 using Shared;
 
-namespace AdministrationModule.Administrators;
+namespace AdministrationModule.Administrators.Domain;
 
 internal class Administrator : AggregateRoot
 {

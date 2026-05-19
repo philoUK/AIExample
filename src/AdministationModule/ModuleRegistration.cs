@@ -1,5 +1,6 @@
+using AdministrationModule.Administrators.Commands;
 using AdministrationModule.Administrators.Endpoints;
-using AdministrationModule.Administrators.UseCases;
+using AdministrationModule.Infrastructure;
 using EventStore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;

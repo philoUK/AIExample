@@ -1,8 +1,7 @@
-using EventStore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace AdministrationModule;
+namespace AdministrationModule.Infrastructure;
 
 public class AdministrationEventStoreDbContextFactory
     : IDesignTimeDbContextFactory<AdministrationEventStoreDbContext>
@@ -11,7 +10,8 @@ public class AdministrationEventStoreDbContextFactory
     {
         var options = new DbContextOptionsBuilder<AdministrationEventStoreDbContext>()
             .UseNpgsql(
-                "Host=localhost;Database=administration-eventstore;Username=postgres;Password=postgres")
+                "Host=localhost;Database=administration-eventstore;Username=postgres;Password=postgres"
+            )
             .Options;
         return new AdministrationEventStoreDbContext(options);
     }

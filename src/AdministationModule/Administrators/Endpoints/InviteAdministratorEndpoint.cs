@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using AdministrationContracts;
-using AdministrationModule.Administrators.UseCases;
+using AdministrationModule.Administrators.Commands;
+using AdministrationModule.Infrastructure;
 using EventStore;
 using Microsoft.AspNetCore.Http;
 

@@ -1,4 +1,4 @@
-namespace AdministrationModule.Administrators;
+namespace AdministrationModule.Administrators.Domain;
 
 internal abstract record AdministratorStatus
 {

@@ -1,6 +1,6 @@
 using Shared;
 
-namespace AdministrationModule.Administrators;
+namespace AdministrationModule.Administrators.Domain;
 
 internal record RegistrationId(Guid Value)
 {

@@ -1,7 +1,8 @@
+using AdministrationModule.Administrators.Domain;
 using EventStore;
 using Shared;
 
-namespace AdministrationModule.Administrators.UseCases;
+namespace AdministrationModule.Administrators.Commands;
 
 internal record InviteAdministratorCommand(
     Guid InvitedBy,
